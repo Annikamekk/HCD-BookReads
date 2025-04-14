@@ -8,22 +8,42 @@ body{
 }
 header{
     position: fixed;
-    display: flex;
-    gap: 1em;
     background-color:rgb(45, 45, 52) ;
     font-weight: bold;
     width: 100%;
-    height: 3em;
+    height:auto;
     z-index: 1;
     align-items: center;
-
 }
-
+/* 
 header label{
     width: 7em;
+} */
+header div{
+    margin: 1em;
+    display: flex;
+    gap: 1em;
 }
-a{
-    color: white;
+header div a{
+    background-color:rgb(233, 245, 255);
+    color: rgb(45, 45, 52);
+    text-decoration: none;
+    padding: .5em  .7em;
+    border-radius: .5em;
+
+}
+.highlight{
+    background-color:#ffef74;
+    color: rgb(45, 45, 52);
+    padding: .5em;
+}
+
+p >  a{
+    color: rgb(255, 249, 166);
+}
+h1{
+    color: rgb(233, 245, 255);
+    font-size: 2.3em;
 }
 p{
     font-size: 20px;
@@ -31,8 +51,13 @@ p{
 
 }
 *:focus{
-    outline: .2em solid #ff772d;
-    padding: .2em;
+    
+    outline: .3em solid #ff7700;
+    
+    /* padding: .2em; */
+}
+.note-active-temp {
+    outline: .2em solid #ff4141;
 }
 
 main{
@@ -40,34 +65,13 @@ main{
   top: 5em;
   display: flex;
 }
-main >div:nth-child(1){
+/* main >div:nth-child(1){
     width: 25%;
-}
+} */
 
-main >div:nth-child(2){
+/* main >div:nth-child(2){
     width: 75%;
-}
-
-#notes-summary{
-    position: fixed; 
-    background-color: rgb(45, 45, 52) ;
-}
-
-#note-links > div{
-    margin: 0;
-}
-
-#note-links{
-    border-right: .3em solid #ffae74;
-    border-radius: .2em ;
-    padding: .5em; 
-    max-width:100%;
-}
-
-#note-links H3{
-    padding: .2em;
-    margin: 0;
-}
+} */
 ul{
     text-align: start;
 }
@@ -86,19 +90,18 @@ h1,h2,h3,h4,h5{
     color: #f61212;
 } */
 
-p.highlighted {
-    background-color:#ffae74;
+.highlighted {
+    background-color:#ffef74;
     color: black;
-    outline: .5em solid #ffae74;
+    /* outline: .5em solid #ffae74; */
   }
 
   .note-block {
-    width: 50vw;
+    width: 30vw;
     height: 30vh;
     border: none;
     padding: 0.5em;
     background: #a4a4a4;
-    margin: auto;
   }
 
   .note-block textarea {
@@ -106,6 +109,30 @@ p.highlighted {
     height: 20vh;
   }
 
-.note-text {
-    hyphens: manual;
+  .note-list{
+    display: none; /* standaard verbergen */
+    /* padding: 1em; */
+    width: 30vw;
+  }
+  .note-list.has-notes {
+    margin: .7em;
+    padding: 1em;
+    display: block; /* alleen zichtbaar als er notities zijn */
+    border-radius: .5em;
+
+    /* border-right: .3em solid #ffe100;
+    border-left: .3em solid #ffe100; */
+  }
+
+.note-entry{    
+    margin: .5em 0;
+    text-align: start;
+    color:rgb(45, 45, 52);
+    background-color: #e9f5ff;
+    padding: 1em;
+    border-radius: .5em;
+
+}
+.note-entry > strong{
+    padding-bottom: 1em;
 }
