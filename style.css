@@ -1,14 +1,23 @@
+:root{
+    --zwart:rgb(45, 45, 52);
+    --grijs:rgb(106, 106, 108);
+    --wit:rgb(233, 245, 255);
+    --geel:rgb(255, 249, 166);
+    --geel-highlight:#ffef74;
+    --focus-outline:#f61212;
+}
+
 body{
-    background-color: rgb(45, 45, 52);
-    color: rgb(255, 249, 166);
+    background-color: var(--zwart);
+    color: var(--geel);
     position: relative;
     text-align: center;
-    margin: 0 2em;
+    margin: 0 ;
     font-family: Helvetica, sans-serif;
 }
 header{
     position: fixed;
-    background-color:rgb(45, 45, 52) ;
+    background-color:var(--zwart) ;
     font-weight: bold;
     width: 100%;
     height:auto;
@@ -25,7 +34,7 @@ header div{
     gap: 1em;
 }
 header div a{
-    background-color:rgb(233, 245, 255);
+    background-color:var(--wit);
     color: rgb(45, 45, 52);
     text-decoration: none;
     padding: .5em  .7em;
@@ -33,80 +42,135 @@ header div a{
 
 }
 .highlight{
-    background-color:#ffef74;
+    background-color:var(--geel-highlight);
     color: rgb(45, 45, 52);
     padding: .5em;
 }
 
 p >  a{
-    color: rgb(255, 249, 166);
+    color: var(--geel);
 }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6{
+    color:var(--wit);
+}
+
 h1{
-    color: rgb(233, 245, 255);
     font-size: 2.3em;
 }
 p{
     font-size: 20px;
      transition: font-size 0.2s ease, letter-spacing 0.2s ease, font-weight 0.2s ease;
+     margin: 0 0 4em 0;
+}
 
+button{
+    background-color:var(--focus-outline);
+    color:var(--wit) ;
+    font-weight: 500;
+    padding: 1em;
+    border-radius: .5em;
+    border: none;
+    margin-left: 2em;
 }
 *:focus{
     
-    outline: .3em solid #ff7700;
+    outline: .1em solid var(--focus-outline);
     
     /* padding: .2em; */
+    background-color:var(--geel-highlight);
+    color: black;
 }
 .note-active-temp {
-    outline: .2em solid #ff4141;
+    outline: .2em solid var(--focus-outline);
 }
 
-main{
-  position: absolute;
-  top: 5em;
-  display: flex;
-}
-/* main >div:nth-child(1){
-    width: 25%;
-} */
-
-/* main >div:nth-child(2){
-    width: 75%;
-} */
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+    width: 15rem;
+  }
+  input[type="range"]::-webkit-slider-runnable-track {
+    background: #5f0505;
+    height: 0.5rem;
+  }
+  
+  /******** Firefox ********/
+  input[type="range"]::-moz-range-track {
+    background: #5f0505;
+    height: 0.5rem;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    margin-top: -12px; /* Centers thumb on the track */
+    background-color: #eb5c5c;
+    height: 2rem;
+    width: 1rem;    
+ }
+main {
+    position: relative; /* Belangrijk voor de juiste uitlijning van absolute */
+    top: 4.5em;
+    display: flex;
+    margin-right: 2em;
+  }
+  
+  main > div:nth-of-type(1) {
+    width: 20%;
+    position: fixed;
+    background-color: var(--grijs);
+    margin: 0;
+    padding: 2em;
+    height: 100vh; /* Zorg dat de fixed div de hoogte van het scherm bedekt */
+  }
+  
+  main > div:nth-of-type(2) {
+      margin-left: 27%; /* Dit zorgt ervoor dat de tweede div naast de eerste komt */
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+    main > div:nth-of-type(2) div{
+      margin-bottom: 1em;
+    }
+ a{
+    text-decoration: none;
+    color: var(--zwart);
+    font-weight: 600;
+ }
 ul{
     text-align: start;
 }
 
 table{
-   margin: auto;
+   margin: 1em auto;
 }
-
-td p{
-    margin: 0;
-}
-/* strong{
-    color: #f61212;
-}
-h1,h2,h3,h4,h5{
-    color: #f61212;
-} */
 
 .highlighted {
-    background-color:#ffef74;
+    background-color:var(--geel-highlight);
     color: black;
-    /* outline: .5em solid #ffae74; */
   }
 
   .note-block {
     width: 30vw;
     height: 30vh;
     border: none;
-    padding: 0.5em;
-    background: #a4a4a4;
+    padding: .3em;
+    background: var(--grijs);
+    border-radius: .5em;
   }
 
   .note-block textarea {
     width: 100%;
     height: 20vh;
+    border-radius: .3em;
+    border: none;
   }
 
   .note-list{
@@ -119,16 +183,13 @@ h1,h2,h3,h4,h5{
     padding: 1em;
     display: block; /* alleen zichtbaar als er notities zijn */
     border-radius: .5em;
-
-    /* border-right: .3em solid #ffe100;
-    border-left: .3em solid #ffe100; */
   }
 
 .note-entry{    
     margin: .5em 0;
     text-align: start;
-    color:rgb(45, 45, 52);
-    background-color: #e9f5ff;
+    color:var(--zwart);
+    background-color: var(--wit);
     padding: 1em;
     border-radius: .5em;
 

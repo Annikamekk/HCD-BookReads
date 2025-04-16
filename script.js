@@ -37,70 +37,40 @@
 //         });
 
 
-  document.addEventListener('DOMContentLoaded', function () {
-    const chapterLinks = document.querySelectorAll('header div> a');
-
-    chapterLinks.forEach(link => {
-      link.addEventListener('click', function (e) {
-        e.preventDefault(); // Voorkom de standaard link-gedrag (zoals het springen naar de ankerlink)
-
-        // Vind het hoofdstuk waar de link naar verwijst
-        const targetChapter = document.querySelector(link.getAttribute('href'));
-
-        if (targetChapter) {
-          // Scroll naar het hoofdstuk, met het hoofdstuk in het midden van het scherm
-          targetChapter.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center' // Zorgt ervoor dat het hoofdstuk in het midden komt
-          });
-
-          // Zet de focus op het hoofdstuk
-          targetChapter.focus(); // Focus op de <h2> van het hoofdstuk
-
-          // Optioneel: Zet de focus naar de eerste focusbare inhoud binnen dat hoofdstuk
-          const firstFocusable = targetChapter.querySelector('p, a, h1');
-
-          if (firstFocusable) {
-            firstFocusable.focus(); // Zet de focus op de eerste focusbare inhoud
-          }
-        }
-      });
-    });
-  });
-
-
-
-
-
-
 let noteCount = 0;
 let activeSentence = null;
+const noteLinksContainer = document.getElementById('note-links');
 
-// Stap 1: Wrap zinnen en voeg notitie-container toe onder elke paragraaf
-document.querySelectorAll('p').forEach(paragraph => {
+// Zinnen wrappen
+document.querySelectorAll('p').forEach((paragraph, pIndex) => {
   const text = paragraph.innerText;
   const sentences = text.match(/[^\.!\?]+[\.!\?]+["']?|[^\.!\?]+$/g);
   if (!sentences) return;
 
   paragraph.innerHTML = '';
 
-  sentences.forEach(sentence => {
+  sentences.forEach((sentence, sIndex) => {
     const span = document.createElement('span');
     span.classList.add('sentence');
     span.setAttribute('tabindex', '0');
+
+    // Uniek ID per zin
+    const sentenceId = `sentence-${pIndex}-${sIndex}`;
+    span.setAttribute('id', sentenceId);
     span.innerText = sentence.trim() + ' ';
     paragraph.appendChild(span);
   });
 
+  // Container voor notities onder deze paragraaf
   const noteList = document.createElement('div');
   noteList.className = 'note-list';
   paragraph.appendChild(noteList);
 });
 
-// Focus tracking
+// Focus tracking en toetsen
 document.querySelectorAll('.sentence').forEach(sentence => {
-  sentence.addEventListener('focus', function () {
-    activeSentence = this;
+  sentence.addEventListener('focus', () => {
+    activeSentence = sentence;
   });
 
   sentence.addEventListener('keydown', function (e) {
@@ -109,12 +79,12 @@ document.querySelectorAll('.sentence').forEach(sentence => {
       toggleNoteBlock([this]);
     }
 
-    const number = parseInt(e.key);
-    if (!isNaN(number) && number >= 1 && number <= 9 && activeSentence) {
+    const num = parseInt(e.key);
+    if (!isNaN(num) && num >= 1 && num <= 9 && activeSentence) {
       e.preventDefault();
       const allSentences = [...activeSentence.closest('p').querySelectorAll('.sentence')];
       const startIndex = allSentences.indexOf(activeSentence);
-      const selected = allSentences.slice(startIndex, startIndex + number);
+      const selected = allSentences.slice(startIndex, startIndex + num);
 
       if (selected.length > 0) {
         toggleNoteBlock(selected);
@@ -123,13 +93,12 @@ document.querySelectorAll('.sentence').forEach(sentence => {
   });
 });
 
-// Notitieblok tonen
+// Toon notitieblok voor geselecteerde zinnen
 function toggleNoteBlock(selectedSentences) {
   const first = selectedSentences[0];
   const paragraph = first.closest('p');
   const noteList = paragraph.querySelector('.note-list');
 
-  // voorkom meerdere invoervelden tegelijk
   if (paragraph.querySelector('.note-block')) return;
 
   const noteBlock = document.createElement('div');
@@ -148,8 +117,6 @@ function toggleNoteBlock(selectedSentences) {
     selectedSentences.forEach(s => s.classList.remove('note-active'));
   };
 
-  saveBtn.onclick = () => saveNote();
-
   textarea.addEventListener('keydown', function (e) {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -157,32 +124,156 @@ function toggleNoteBlock(selectedSentences) {
     }
   });
 
+  saveBtn.onclick = () => saveNote();
+
   function saveNote() {
     const noteText = textarea.value.trim();
     if (!noteText) return alert('Aantekening is leeg.');
 
+    // Voeg de aantekening alleen één keer toe, ongeacht het aantal geselecteerde zinnen
+    const sentenceIds = selectedSentences.map(sentence => sentence.id);  // Verzamelt de ID's van de geselecteerde zinnen
     noteCount++;
+
+    // --- Notitie in paragraaf onderaan
     const entry = document.createElement('div');
     entry.className = 'note-entry';
 
-    const zinTekst = selectedSentences.map(s => `"${s.innerText.trim()}"`).join(' ');
-    entry.innerHTML = `<strong>Aantekening:</strong> <br> ${noteText}`;
-    noteList.appendChild(entry);
-    noteList.classList.add('has-notes');
+    const entryText = document.createElement('div');
+    entryText.innerHTML = `"${noteText}"`; // Toon de tekst van de aantekening
 
-    selectedSentences.forEach(s => {
-      s.classList.add('highlighted');
-      s.classList.remove('note-active');
+    const editBtn = document.createElement('button');
+    editBtn.textContent = 'Bewerken';
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.textContent = 'Verwijderen';
+
+    editBtn.onclick = () => {
+      const editField = document.createElement('textarea');
+      editField.value = noteText;
+
+      const saveEditBtn = document.createElement('button');
+      saveEditBtn.textContent = 'Opslaan';
+
+      saveEditBtn.onclick = () => {
+        const newText = editField.value.trim();
+        if (!newText) return alert('Leeg');
+        entryText.innerHTML = `"${newText}"`; // Werk de aantekening bij
+        entry.replaceChild(entryText, editField);
+        entry.appendChild(editBtn);
+        entry.appendChild(deleteBtn);
+        saveEditBtn.remove();
+      };
+
+      entry.replaceChild(editField, entryText);
+      entry.removeChild(editBtn);
+      entry.removeChild(deleteBtn);
+      entry.appendChild(saveEditBtn);
+    };
+
+    deleteBtn.onclick = () => {
+      selectedSentences.forEach(sentence => {
+        sentence.classList.remove('highlighted');
+      });
+      entry.remove();
+      sentenceIds.forEach(id => {
+        const topLink = document.getElementById(`note-link-${id}`);
+        if (topLink) topLink.remove();
+      });
+    };
+
+    entry.appendChild(entryText);
+    entry.appendChild(editBtn);
+    entry.appendChild(deleteBtn);
+
+    noteList.appendChild(entry);
+
+    // --- Bovenaan overzicht toevoegen (één keer, voor de hele selectie)
+    const topEntry = document.createElement('div');
+    topEntry.className = 'note-entry';
+    topEntry.id = `note-link-${sentenceIds.join('-')}`; // Gebruik alle zinnen ID's voor een unieke link
+
+    const link = document.createElement('a');
+    link.href = `#${sentenceIds[0]}`; // Link naar de eerste geselecteerde zin
+    link.textContent = `${noteText}`;
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.getElementById(sentenceIds[0]);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target.focus();
+      }
     });
 
+    topEntry.appendChild(link);
+    noteLinksContainer.appendChild(topEntry);
+
+    // Verwijder de notitieblok na opslaan
     noteBlock.remove();
+
+    // Focus naar de volgende zin in dezelfde paragraaf
+    const allSentences = [...paragraph.querySelectorAll('.sentence')];
+    const currentIndex = allSentences.indexOf(first);
+    const nextSentence = allSentences[currentIndex + 1];
+
+    if (nextSentence) {
+      nextSentence.focus();
+    }
   }
 
-  selectedSentences.forEach(s => s.classList.add('note-active'));
+  // Highlight geselecteerde zinnen
+  selectedSentences.forEach(s => {
+    s.classList.add('note-active');
+    s.classList.add('highlighted');  // Zorg dat de zinnen gehighlight worden
+  });
+
   noteBlock.appendChild(textarea);
   noteBlock.appendChild(saveBtn);
   noteBlock.appendChild(cancelBtn);
-
   paragraph.appendChild(noteBlock);
   textarea.focus();
+}
+
+document.addEventListener('keydown', function (e) {
+  // Controleer of de focus zich in een textarea bevindt
+  if (e.target.tagName.toLowerCase() === 'textarea' || e.target.tagName.toLowerCase() === 'input') {
+    return; // Stop de 'j' toets als de focus in een textarea of input staat
+  }
+
+  // Als de 'j' toets wordt ingedrukt en geen modifier keys zoals Ctrl, Meta, of Alt ingedrukt zijn
+  if (e.key === 'j' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+    const notesSection = document.getElementById('notes-summary');
+    if (notesSection) {
+      notesSection.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+
+      // Zoek iets in de sectie om focus op te zetten (zoals de heading)
+      const focusTarget = notesSection.querySelector('h2, h1, div, section');
+      if (focusTarget) {
+        focusTarget.setAttribute('tabindex', '-1'); // Maak tijdelijk focusbaar
+        focusTarget.focus();
+      }
+    }
+  }
+});
+
+
+const speedControl = document.getElementById('speedControl');
+const speedValue = document.getElementById('speedValue');
+
+// Update de weergave van de snelheid
+speedControl.addEventListener('input', function() {
+  speedValue.textContent = speedControl.value;
+});
+
+function speakText() {
+  const text = 'Dit is een voorbeeld van het voorlezen van tekst met aanpasbare snelheid.';
+  const utterance = new SpeechSynthesisUtterance(text);
+
+  // Stel de snelheid in op basis van de sliderwaarde
+  utterance.rate = parseFloat(speedControl.value);
+
+  // Spreek de tekst uit
+  speechSynthesis.speak(utterance);
 }
