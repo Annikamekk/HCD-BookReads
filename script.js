@@ -259,21 +259,21 @@ document.addEventListener('keydown', function (e) {
 });
 
 
-const speedControl = document.getElementById('speedControl');
-const speedValue = document.getElementById('speedValue');
+ const speedControl = document.getElementById('speedControl');
+    const speedValue = document.getElementById('speedValue');
 
-// Update de weergave van de snelheid
-speedControl.addEventListener('input', function() {
-  speedValue.textContent = speedControl.value;
-});
+    // Update de weergave van de snelheid
+    speedControl.addEventListener('input', function() {
+      speedValue.textContent = speedControl.value;
+    });
 
-function speakText() {
-  const text = 'Dit is een voorbeeld van het voorlezen van tekst met aanpasbare snelheid.';
-  const utterance = new SpeechSynthesisUtterance(text);
+    function speakText() {
+      const text = 'Dit is een voorbeeld van het voorlezen van tekst met aanpasbare snelheid.';
+      const utterance = new SpeechSynthesisUtterance(text);
 
-  // Stel de snelheid in op basis van de sliderwaarde
-  utterance.rate = parseFloat(speedControl.value);
+      // Stel de snelheid in op basis van de sliderwaarde
+      utterance.rate = parseFloat(speedControl.value);
 
-  // Spreek de tekst uit
-  speechSynthesis.speak(utterance);
-}
+      // Spreek de tekst uit
+      speechSynthesis.speak(utterance);
+    };

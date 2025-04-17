@@ -79,7 +79,7 @@ button{
 }
 *:focus{
     
-    outline: .1em solid var(--focus-outline);
+    outline: .2em solid var(--focus-outline);
     
     /* padding: .2em; */
     background-color:var(--geel-highlight);
