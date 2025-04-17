@@ -1,3 +1,42 @@
+// const slider = document.getElementById("fontSizeSlider");
+//         const paragraphs = document.querySelectorAll("p"); // Alle <p>-elementen selecteren
+//         const fontSizeValue = document.getElementById("fontSizeValue");
+
+//         slider.addEventListener("input", function() {
+//             let size = slider.value + "px";
+//             fontSizeValue.textContent = size;
+            
+//             // Loop door alle <p>-elementen en pas de font-size aan
+//             paragraphs.forEach(p => {
+//                 p.style.fontSize = size;
+//             });
+//         });
+
+//         const lineHeightSlider = document.getElementById("lineHeightSlider");
+//         const lineHeightValue = document.getElementById("lineHeightValue");
+        
+//         lineHeightSlider.addEventListener("input", function() {
+//             let lineHeight = lineHeightSlider.value;
+//             lineHeightValue.textContent = lineHeight;
+        
+//             paragraphs.forEach(p => {
+//                 p.style.lineHeight = lineHeight;
+//             });
+//         });
+        
+//         const fontWeightSlider = document.getElementById("fontWeightSlider");
+//         const fontWeightValue = document.getElementById("fontWeightValue");
+        
+//         fontWeightSlider.addEventListener("input", function () {
+//             let weight = fontWeightSlider.value;
+//             fontWeightValue.textContent = weight;
+        
+//             paragraphs.forEach(p => {
+//                 p.style.fontWeight = weight;
+//             });
+//         });
+
+
 let noteCount = 0;
 let activeSentence = null;
 const noteLinksContainer = document.getElementById('note-links');
