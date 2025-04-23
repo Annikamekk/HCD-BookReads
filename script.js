@@ -36,6 +36,35 @@
 //             });
 //         });
 
+document.getElementById('note-links').setAttribute('aria-live', 'assertive');
+
+document.addEventListener('keydown', function(event) {
+  // Negeer als de focus op een input of textarea zit
+  const tag = event.target.tagName.toLowerCase();
+  if (tag === 'textarea' || tag === 'input') return;
+
+  // Scroll naar boven bij 'f'
+  document.addEventListener('keydown', function(event) {
+    // Wanneer de 'f' toets wordt ingedrukt, scroll naar de header en verplaats de focus
+    if (event.key.toLowerCase() === 'f') {
+      const header = document.getElementById('top');
+      if (header) {
+        header.scrollIntoView({ behavior: 'smooth' });
+  
+        // Wacht even tot de header is gescrold en voorgelezen is
+        setTimeout(() => {
+          // Verplaats de focus naar het eerste zin of een ander belangrijk element
+          const firstSentence = document.querySelector('.sentence');
+          if (firstSentence) {
+            firstSentence.focus();
+          }
+        }, 500);  // Stel hier de tijd in die nodig is voor de screenreader om de header voor te lezen
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  });
+});
 
 let noteCount = 0;
 let activeSentence = null;
@@ -84,7 +113,8 @@ document.querySelectorAll('.sentence').forEach(sentence => {
       e.preventDefault();
       const allSentences = [...activeSentence.closest('p').querySelectorAll('.sentence')];
       const startIndex = allSentences.indexOf(activeSentence);
-      const selected = allSentences.slice(startIndex, startIndex + num);
+      const selected = allSentences.slice(Math.max(0, startIndex - num + 1), startIndex + 1);
+
 
       if (selected.length > 0) {
         toggleNoteBlock(selected);
@@ -240,40 +270,18 @@ document.addEventListener('keydown', function (e) {
   }
 
   // Als de 'j' toets wordt ingedrukt en geen modifier keys zoals Ctrl, Meta, of Alt ingedrukt zijn
-  if (e.key === 'j' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+  if (e.key === 'j') {
     const notesSection = document.getElementById('notes-summary');
     if (notesSection) {
-      notesSection.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
-      });
-
-      // Zoek iets in de sectie om focus op te zetten (zoals de heading)
-      const focusTarget = notesSection.querySelector('h2, h1, div, section');
-      if (focusTarget) {
-        focusTarget.setAttribute('tabindex', '-1'); // Maak tijdelijk focusbaar
-        focusTarget.focus();
-      }
+        notesSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Focus naar een element in de notities sectie
+        const focusTarget = notesSection.querySelector('h2, h1, div, section');
+        if (focusTarget) {
+            focusTarget.setAttribute('tabindex', '-1');  // Focus tijdelijk maken
+            focusTarget.focus();
+        }
     }
-  }
+}
 });
 
-
- const speedControl = document.getElementById('speedControl');
-    const speedValue = document.getElementById('speedValue');
-
-    // Update de weergave van de snelheid
-    speedControl.addEventListener('input', function() {
-      speedValue.textContent = speedControl.value;
-    });
-
-    function speakText() {
-      const text = 'Dit is een voorbeeld van het voorlezen van tekst met aanpasbare snelheid.';
-      const utterance = new SpeechSynthesisUtterance(text);
-
-      // Stel de snelheid in op basis van de sliderwaarde
-      utterance.rate = parseFloat(speedControl.value);
-
-      // Spreek de tekst uit
-      speechSynthesis.speak(utterance);
-    };
+    
