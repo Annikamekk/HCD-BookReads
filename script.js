@@ -1,69 +1,92 @@
-// const slider = document.getElementById("fontSizeSlider");
-//         const paragraphs = document.querySelectorAll("p"); // Alle <p>-elementen selecteren
-//         const fontSizeValue = document.getElementById("fontSizeValue");
+const toggleBtn = document.getElementById('toggleSettings');
+const settingsPanel = document.getElementById('settingsPanel');
 
-//         slider.addEventListener("input", function() {
-//             let size = slider.value + "px";
-//             fontSizeValue.textContent = size;
+toggleBtn.addEventListener('click', () => {
+  const isHidden = settingsPanel.hasAttribute('hidden');
+
+  if (isHidden) {
+    settingsPanel.removeAttribute('hidden');
+    toggleBtn.textContent = 'Instellingen verbergen';
+
+    // Zet de focus op het eerste focusbare element in het panel
+    const firstFocusable = settingsPanel.querySelector('input, button, [tabindex]:not([tabindex="-1"])');
+    if (firstFocusable) firstFocusable.focus();
+
+  } else {
+    settingsPanel.setAttribute('hidden', '');
+    toggleBtn.textContent = 'Instellingen tonen';
+  }
+});
+
+// Enter-key sluit het panel, tenzij focus op input zit
+settingsPanel.addEventListener('keydown', (e) => {
+  const tag = e.target.tagName.toLowerCase();
+  const isFormElement = ['input', 'select', 'textarea', 'button'].includes(tag);
+
+  if (e.key === 'Enter' && !e.shiftKey && !isFormElement) {
+    settingsPanel.setAttribute('hidden', '');
+    toggleBtn.textContent = 'Instellingen tonen';
+    toggleBtn.focus();
+  }
+});
+
+
+
+const slider = document.getElementById("fontSizeSlider");
+        const paragraphs = document.querySelectorAll("p"); // Alle <p>-elementen selecteren
+        const fontSizeValue = document.getElementById("fontSizeValue");
+
+        slider.addEventListener("input", function() {
+            let size = slider.value + "px";
+            fontSizeValue.textContent = size;
             
-//             // Loop door alle <p>-elementen en pas de font-size aan
-//             paragraphs.forEach(p => {
-//                 p.style.fontSize = size;
-//             });
-//         });
+            // Loop door alle <p>-elementen en pas de font-size aan
+            paragraphs.forEach(p => {
+                p.style.fontSize = size;
+            });
+        });
 
-//         const lineHeightSlider = document.getElementById("lineHeightSlider");
-//         const lineHeightValue = document.getElementById("lineHeightValue");
+        const lineHeightSlider = document.getElementById("lineHeightSlider");
+        const lineHeightValue = document.getElementById("lineHeightValue");
         
-//         lineHeightSlider.addEventListener("input", function() {
-//             let lineHeight = lineHeightSlider.value;
-//             lineHeightValue.textContent = lineHeight;
+        lineHeightSlider.addEventListener("input", function() {
+            let lineHeight = lineHeightSlider.value;
+            lineHeightValue.textContent = lineHeight;
         
-//             paragraphs.forEach(p => {
-//                 p.style.lineHeight = lineHeight;
-//             });
-//         });
+            paragraphs.forEach(p => {
+                p.style.lineHeight = lineHeight;
+            });
+        });
         
-//         const fontWeightSlider = document.getElementById("fontWeightSlider");
-//         const fontWeightValue = document.getElementById("fontWeightValue");
+        const fontWeightSlider = document.getElementById("fontWeightSlider");
+        const fontWeightValue = document.getElementById("fontWeightValue");
         
-//         fontWeightSlider.addEventListener("input", function () {
-//             let weight = fontWeightSlider.value;
-//             fontWeightValue.textContent = weight;
+        fontWeightSlider.addEventListener("input", function () {
+            let weight = fontWeightSlider.value;
+            fontWeightValue.textContent = weight;
         
-//             paragraphs.forEach(p => {
-//                 p.style.fontWeight = weight;
-//             });
-//         });
+            paragraphs.forEach(p => {
+                p.style.fontWeight = weight;
+            });
+        });
 
 document.getElementById('note-links').setAttribute('aria-live', 'assertive');
 
 document.addEventListener('keydown', function(event) {
-  // Negeer als de focus op een input of textarea zit
   const tag = event.target.tagName.toLowerCase();
-  if (tag === 'textarea' || tag === 'input') return;
 
-  // Scroll naar boven bij 'f'
-  document.addEventListener('keydown', function(event) {
-    // Wanneer de 'f' toets wordt ingedrukt, scroll naar de header en verplaats de focus
-    if (event.key.toLowerCase() === 'f') {
-      const header = document.getElementById('top');
-      if (header) {
-        header.scrollIntoView({ behavior: 'smooth' });
-  
-        // Wacht even tot de header is gescrold en voorgelezen is
-        setTimeout(() => {
-          // Verplaats de focus naar het eerste zin of een ander belangrijk element
-          const firstSentence = document.querySelector('.sentence');
-          if (firstSentence) {
-            firstSentence.focus();
-          }
-        }, 500);  // Stel hier de tijd in die nodig is voor de screenreader om de header voor te lezen
-      } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
+  // Sta 'f' toe, zelfs in input/textarea
+  if (event.key.toLowerCase() === 'f') {
+    const header = document.getElementById('top');
+    if (header) {
+      header.scrollIntoView({ behavior: 'smooth' });
+
+      const link = header.querySelector('a');
+      if (link) link.focus();
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  });
+  }
 });
 
 let noteCount = 0;

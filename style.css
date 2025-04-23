@@ -20,20 +20,44 @@ header{
     background-color:var(--zwart) ;
     font-weight: bold;
     width: 100%;
-    height:auto;
+    height:3em;
     z-index: 1;
     align-items: center;
 }
+header >button{
+  margin: .5em;
+  height: 2em;
+  padding: .2em;
+}
+header div{
+  background-color: var(--zwart);
+}
+header a{
+  position: absolute;
+	left: -999em;
+}
+
+header  a:focus{
+	
+	position: absolute;
+	left: 5em;
+}
+
+#settingsPanel {
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+}
+
 /* 
 header label{
     width: 7em;
 } */
-header div{
-    margin: 1em;
+header nav{
+    /* margin: 1em; */
     display: flex;
     gap: 1em;
 }
-header div a{
+header nav a{
     background-color:var(--wit);
     color: rgb(45, 45, 52);
     text-decoration: none;
@@ -98,6 +122,7 @@ button{
 
 .note-active-temp {
     outline: .2em solid var(--focus-outline);
+    scroll-snap-type: mandatory;
 }
 
 input[type="range"] {
@@ -127,7 +152,7 @@ input[type="range"] {
  }
 main {
     position: relative; /* Belangrijk voor de juiste uitlijning van absolute */
-    top: 4.5em;
+    top: 3.5em;
     display: flex;
     margin-right: 2em;
   }
@@ -140,7 +165,6 @@ main {
   }
   
   main > div:nth-of-type(1) {
-
       width: 20%;
     position: fixed;
     background-color: var(--grijs);
@@ -170,13 +194,17 @@ table{
   }
 
   .note-block {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 30vw;
     height: 30vh;
-    border: none;
-    padding: .3em;
     background: var(--grijs);
+    padding: 1em;
     border-radius: .5em;
-    scroll-margin-top:10vh;
+    z-index: 1000;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
   }
 
   .note-block textarea {
