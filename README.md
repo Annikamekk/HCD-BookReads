@@ -111,18 +111,12 @@ Hij vond het er goed uit zien en redelijk fijn om te werken. Voor zon korte tijd
 
 ### ✅ Week 4 – Fine-tuning & eindtest
 
-**To do:**
-- [ ] Laatste bugs oplossen  
-- [ ] Gebruikerstest met finale versie  
-- [ ] Toetsenbordbediening controleren en verbeteren  
-- [ ] Consistentie in layout en structuur verbeteren  
-
 **Gebruiker getest?**  
 - [X] Ja  
 - [ ] Nee
 
 **Feedback gebruiker:**  
-Hij wist dat het de laatste week was dus hij gaf neit veel feedback. maar een klas genoot had iets gemaakt met een snel toets 'w' waar je dus een word bestand van de tekst met aantekeningen kan maken en dat vond hij heel fijn en vroeg aan hem of hij dan de hele tekst met aantekeningen wil hebben of alleen de gehighlighte tekst met de aantekeningen. Hij vertelde dat hij het eigenlijk alle twee wel wilde, omdat hij soms de tekst moet door sturen en dat kan niet via de website, maar het kan ook wel echt heftig zijn om de hele tekst te downloaden.  
+Hij wist dat het de laatste week was dus hij gaf niet veel feedback. maar een klas genoot had iets gemaakt met een snel toets 'w' waar je dus een word bestand van de tekst met aantekeningen kan maken en dat vond hij heel fijn en vroeg aan hem of hij dan de hele tekst met aantekeningen wil hebben of alleen de gehighlighte tekst met de aantekeningen. Hij vertelde dat hij het eigenlijk alle twee wel wilde, omdat hij soms de tekst moet door sturen en dat kan niet via de website, maar het kan ook wel echt heftig zijn om de hele tekst te downloaden.  
 
 **Reflectie week 4:**  
 ik vind na 4 weken wel dat ik meer had kunnen doen, maar er was echt tijdsgebrek en mijn kunsten van javascript is ook niet helemaal top dus dit is het beste wat ik kon doen in deze 4 weken.  De gebruiker was er blij mee, want het was duidelijk en hij kon de belangrijke dingen zien. 
